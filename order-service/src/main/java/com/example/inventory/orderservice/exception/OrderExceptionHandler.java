@@ -3,6 +3,7 @@ package com.example.inventory.orderservice.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -17,6 +18,7 @@ import java.util.Date;
 public class OrderExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(OrderNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ResponseEntity<ResponseErrorDetails> handleObjectIdNotValid(OrderNotFoundException exception,
                                                                           WebRequest request) {
         ResponseErrorDetails errorDetails = new ResponseErrorDetails(new Date(),
@@ -25,6 +27,7 @@ public class OrderExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(InvalidRequestException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     protected ResponseEntity<ResponseErrorDetails> handleInvalidRequest(InvalidRequestException exception,
                                                                         WebRequest request) {
         ResponseErrorDetails errorDetails = new ResponseErrorDetails(new Date(),
@@ -33,6 +36,7 @@ public class OrderExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(OrderCreationException.class)
+    @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
     protected ResponseEntity<ResponseErrorDetails> handleOrderCreationException(OrderCreationException exception,
                                                                                 WebRequest request) {
         ResponseErrorDetails errorDetails = new ResponseErrorDetails(new Date(),

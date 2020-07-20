@@ -5,6 +5,12 @@ import com.example.inventory.orderservice.exception.InvalidRequestException;
 import com.example.inventory.orderservice.exception.OrderCreationException;
 import com.example.inventory.orderservice.exception.OrderNotFoundException;
 import com.example.inventory.orderservice.service.OrderService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +45,15 @@ public class OrderController {
      * @throws InvalidRequestException
      * @throws OrderCreationException
      */
+    @Operation(summary = "Create an order")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Order created",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = OrderDTO.class))}),
+            @ApiResponse(responseCode = "422", description = "Invalid Request",
+                    content = @Content),
+            @ApiResponse(responseCode = "417", description = "Failed to create an Order",
+                    content = @Content)
+    })
     @PostMapping
     public ResponseEntity<OrderDTO> createOrder(@Valid @RequestBody OrderDTO orderDTO, Errors errors) {
         log.info("Creating an Order");
@@ -64,6 +79,13 @@ public class OrderController {
      * @return ResponseEntity - which includes the requested order and an HTTP Status Code
      * @throws OrderNotFoundException
      */
+    @Operation(summary = "Get an Order by its id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found the order",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = OrderDTO.class))}),
+            @ApiResponse(responseCode = "404", description = "Order not found",
+                    content = @Content)
+    })
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long orderId) {
         log.info("Getting order details for order id - {}", orderId);
@@ -80,6 +102,13 @@ public class OrderController {
      * @return ResponseEntity - which includes list of orders and an HTTP Status Code
      * @throws OrderNotFoundException
      */
+    @Operation(summary = "Get all Orders")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Got all orders",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = List.class))}),
+            @ApiResponse(responseCode = "404", description = "No Orders found",
+                    content = @Content)
+    })
     @GetMapping
     public ResponseEntity<List<OrderDTO>> getOrders() {
         log.info("Getting all orders");

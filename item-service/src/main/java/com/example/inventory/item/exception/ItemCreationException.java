@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author omkar
  * @apiNote An Exception which is thrown if item creation fails
  */
-@ResponseStatus(HttpStatus.EXPECTATION_FAILED)
 public class ItemCreationException extends RuntimeException {
 
     public ItemCreationException(String message) {

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author omkar
  * @apiNote An Exception which is thrown if order creation fails
  */
-@ResponseStatus(HttpStatus.EXPECTATION_FAILED)
 public class OrderCreationException extends RuntimeException {
 
     public OrderCreationException(String message) {

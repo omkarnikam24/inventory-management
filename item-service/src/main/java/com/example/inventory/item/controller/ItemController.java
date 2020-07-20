@@ -5,6 +5,11 @@ import com.example.inventory.item.exception.InvalidRequestException;
 import com.example.inventory.item.exception.ItemCreationException;
 import com.example.inventory.item.exception.ItemNotFoundException;
 import com.example.inventory.item.service.ItemService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +45,15 @@ public class ItemController {
      * @throws InvalidRequestException
      * @throws ItemCreationException
      */
+    @Operation(summary = "Add an item")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Item created",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ItemDTO.class))}),
+            @ApiResponse(responseCode = "422", description = "Invalid Request",
+                    content = @Content),
+            @ApiResponse(responseCode = "417", description = "Failed to add an item",
+                    content = @Content)
+    })
     @PostMapping
     public ResponseEntity<?> createItem(@Valid @RequestBody ItemDTO itemDTO, Errors errors) {
         log.info("Saving an Item");
@@ -64,6 +78,13 @@ public class ItemController {
      * @return ResponseEntity
      * @throws ResponseStatusException
      */
+    @Operation(summary = "Update item quantities")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Item Quantities updated",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}),
+            @ApiResponse(responseCode = "417", description = "Failed to update",
+                    content = @Content)
+    })
     @PutMapping
     public ResponseEntity<String> updateQuantity(@RequestBody Set<ItemDTO> items) {
         log.info("Processing Item quantities");
@@ -83,6 +104,13 @@ public class ItemController {
      * @return ResponseEntity - which includes the requested item and an HTTP Status Code
      * @throws ItemNotFoundException
      */
+    @Operation(summary = "Get an Item by its id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found an item",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ItemDTO.class))}),
+            @ApiResponse(responseCode = "404", description = "Item not found",
+                    content = @Content)
+    })
     @GetMapping("/{productCode}")
     public ResponseEntity<ItemDTO> getItemById(@PathVariable Long productCode) {
         log.info("Getting item details for productCode - {}", productCode);
@@ -99,6 +127,13 @@ public class ItemController {
      * @return ResponseEntity - which includes list of items and an HTTP Status Code
      * @throws ItemNotFoundException
      */
+    @Operation(summary = "Get all Items")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Got all items",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = List.class))}),
+            @ApiResponse(responseCode = "404", description = "No Items found",
+                    content = @Content)
+    })
     @GetMapping
     public ResponseEntity<List<ItemDTO>> getItems() {
         log.info("Getting all orders");
