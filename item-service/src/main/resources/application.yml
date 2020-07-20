@@ -1,5 +1,7 @@
 server:
   port: 9999
+  error:
+    include-stacktrace: never
 spring:
   application:
     name: item-service
